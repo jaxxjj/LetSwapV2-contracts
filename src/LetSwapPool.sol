@@ -40,6 +40,13 @@ contract LetSwapPool {
         slot0 = Slot0({sqrtPriceX96: sqrtPriceX96, tick: tick, unlocked: true});
     }
 
+    function checkTicks(int24 tickLower, int24 tickUpper) pure {
+        require(tickLower < tickUpper);
+        require(TickMath.MIN_TICK <= tickLower);
+        require(tickUpper <= TickMath.MAX_TICK);
+    }
+    
+
     function mint(
         address recipient,
         int24 tickLower,
