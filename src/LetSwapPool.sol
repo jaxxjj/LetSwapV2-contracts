@@ -202,6 +202,36 @@ contract LetSwapPool {
             }
         }
     }
+    // actually transfer tokens to the recipient
+    function collect(
+        address recipient,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount0Requested,
+        uint128 amount1Requested
+    ) external lock returns (uint128 amount0, uint128 amount1) {
+        Position.Info storage position =
+            positions.get(msg.sender, tickLower, tickUpper);
+
+        // min(amount owed, amount request)
+        amount0 = amount0Requested > position.tokensOwed0
+            ? position.tokensOwed0
+            : amount0Requested;
+        amount1 = amount1Requested > position.tokensOwed1
+            ? position.tokensOwed1
+            : amount1Requested;
+
+       
+        // update the position and transfer tokens to the recipient
+        if (amount0 > 0) {
+            position.tokensOwed0 -= amount0;
+            IERC20(token0).transfer(recipient, amount0);
+        }
+        if (amount1 > 0) {
+            position.tokensOwed1 -= amount1;
+            IERC20(token1).transfer(recipient, amount1);
+        }
+    }
     function burn(int24 tickLower, int24 tickUpper, uint128 amount)
         external
         lock
