@@ -33,4 +33,40 @@ contract LetSwapPool {
         maxLiquidityPerTick = Tick.tickSpacingToMaxLiquidityPerTick(_tickSpacing);
     }
 
+    // initialize the pool with the initial price
+    function initialize(uint160 sqrtPriceX96) external {
+        require(slot0.sqrtPriceX96 == 0, "already initialized");
+        int24 tick = TickMath.getTickAtSqrtRatio(sqrtPriceX96);
+        slot0 = Slot0({sqrtPriceX96: sqrtPriceX96, tick: tick, unlocked: true});
+    }
+
+    function mint(
+        address recipient,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount
+    ) external lock returns (uint256 amount0, uint256 amount1) {
+        require(amount > 0, "amount = 0");
+
+        (, int256 amount0Int, int256 amount1Int) = _modifyPosition(
+            ModifyPositionParams({
+                owner: recipient,
+                tickLower: tickLower,
+                tickUpper: tickUpper,
+                // 0 < amount <= max int128 = 2**127 - 1
+                liquidityDelta: int256(uint256(amount)).toInt128()
+            })
+        );
+
+        amount0 = uint256(amount0Int);
+        amount1 = uint256(amount1Int);
+
+        if (amount0 > 0) {
+            IERC20(token0).transferFrom(msg.sender, address(this), amount0);
+        }
+        if (amount1 > 0) {
+            IERC20(token1).transferFrom(msg.sender, address(this), amount1);
+        }
+    }
+
 }
