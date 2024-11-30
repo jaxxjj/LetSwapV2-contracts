@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT 
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 import {Tick} from "./lib/Tick.sol";
 import {TickMath} from "./lib/TickMath.sol";
 // slot 0 = 32 bytes
