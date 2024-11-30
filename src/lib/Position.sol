@@ -4,18 +4,33 @@ pragma solidity 0.8.20;
 import "./FullMath.sol";
 import "./FixedPoint128.sol";
 
+/// @title Position
+/// @notice Positions represent an owner's liquidity between a lower and upper tick boundary
+/// @dev Positions store additional state for tracking fees owed to the position
 library Position {
+    /// @notice Position state holding the liquidity amount and fee growth data
+    /// @dev Packed for gas efficiency - uses uint128 where possible
     struct Info {
-        // the amount of liquidity owned by this position
+        /// @notice The amount of liquidity owned by this position
         uint128 liquidity;
-        // fee growth per unit of liquidity as of the last update to liquidity or fees owed
+        /// @notice Fee growth per unit of liquidity for token0, as of last position update
+        /// @dev Stored as a Q128.128 fixed point number
         uint256 feeGrowthInside0LastX128;
+        /// @notice Fee growth per unit of liquidity for token1, as of last position update
+        /// @dev Stored as a Q128.128 fixed point number
         uint256 feeGrowthInside1LastX128;
-        // the fees owed to the position owner in token0/token1
+        /// @notice Uncollected token0 fees owed to the position owner
         uint128 tokensOwed0;
+        /// @notice Uncollected token1 fees owed to the position owner
         uint128 tokensOwed1;
     }
 
+    /// @notice Returns the Info struct for a given position
+    /// @param self The mapping containing all position information
+    /// @param owner The address of the position owner
+    /// @param tickLower The lower tick boundary of the position
+    /// @param tickUpper The upper tick boundary of the position
+    /// @return position The position info struct for this owner and tick range
     function get(
         mapping(bytes32 => Info) storage self,
         address owner,
@@ -26,6 +41,12 @@ library Position {
             self[keccak256(abi.encodePacked(owner, tickLower, tickUpper))];
     }
 
+    /// @notice Updates a position with new liquidity and fee growth data
+    /// @dev Calculates fees owed and updates position state
+    /// @param self The position to update
+    /// @param liquidityDelta The change in liquidity (positive for increase, negative for decrease)
+    /// @param feeGrowthInside0X128 The all-time fee growth in token0, per unit of liquidity, inside the position's tick range
+    /// @param feeGrowthInside1X128 The all-time fee growth in token1, per unit of liquidity, inside the position's tick range
     function update(
         Info storage self,
         int128 liquidityDelta,
