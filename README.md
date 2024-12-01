@@ -1,4 +1,4 @@
-# LetSwap V2: Modern Implementation of Uniswap V3
+# LetSwap V2
 
 ## Overview
 
