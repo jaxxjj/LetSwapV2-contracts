@@ -24,3 +24,7 @@ Y = token 1
 p = price of X in terms of Y = Y/X
 p = (sqrtPriceX96 / 2^96)^2 * (decimalsX / decimalsY)
 sqrtPriceX96 = sqrt(p) * 2^96
+
+## store tick into bitmap
+first 16 bits word position: tick spacing access tick bitmap (int16) -> get mapped tick in (uint256)
+next 8 bits bit position: tick index, set bit to 1 for uint256 mapped tick at tick index x (value of bit position)
