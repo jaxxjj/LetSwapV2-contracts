@@ -15,7 +15,7 @@ LetSwap V2 is a modernized implementation of Uniswap V3's groundbreaking concent
 2. **Concentrated Liquidity**
    - Capital efficiency through focused liquidity provision
    - LPs can concentrate capital in active price ranges
-   - Up to 4000x capital efficiency vs traditional AMMs
+   - Up to 10x capital efficiency vs traditional AMMs
    - Customizable price ranges for different strategies
 
 3. **Tick-Based System**
@@ -194,6 +194,58 @@ Concentrated Liquidity (V3):
 - Virtual reserves per tick range
 
 ## Implementation Considerations
+
+## Deployments
+
+### Sepolia Testnet
+#### Token Addresses
+| Token | Address |
+|-------|----------|
+| WETH | `0x0d51c5F6251D0B36c5c345C3CBD63adCF92Cc748` |
+| USDC | `0x2FB831DB1368acD3ff74516Df002905067247895` |
+| USDT | `0xd6f0977fb4c2A4F1FAfd72207324B81C4EdE874D` |
+| DAI  | `0xC9c7e61563c90Ac185b4724717A77e501501f242` |
+
+#### Pool Addresses
+| Pool Pair | Address |
+|-----------|----------|
+| USDC/USDT | `0x9BD52C1af98A0F6cDe144df8e0EB7ea819d6CB63` |
+| USDT/DAI  | `0x885F73b952bF6af0Fc7D2EFF1dF97A0472E5FEf6` |
+| USDC/DAI  | `0x4afB77b2E049b995B2938cC0345d061aB2F56345` |
+
+### Base Sepolia Testnet
+#### Token Addresses
+| Token | Address |
+|-------|----------|
+| WETH | `0x453f5d93A24feC85dAd475e58e2296784C5cc8bb` |
+| USDC | `0x9557921b189CB5DA63277a51A5321205D9F6BDc6` |
+| USDT | `0x36138804A07495c7BB8A88718e791aCF0b3b5857` |
+| DAI  | `0xa2527E126B0FB9065F06E2AdEd7a884970939aD3` |
+
+#### Pool Addresses
+| Pool Pair | Address |
+|-----------|----------|
+| USDT/USDC | `0xa1C147d72746B1cA4f15A4256C6CaB7e3C6F7191` |
+| USDT/DAI  | `0xF633562eBDD3902b7A69fe3f64fe8aE37BD3A1f5` |
+| USDC/DAI  | `0x397419Cb92C56D6558879bb3fF10B37842C9E607` |
+
+### Arbitrum Sepolia Testnet
+#### Token Addresses
+| Token | Address |
+|-------|----------|
+| WETH | `0xdD7C9A98627bFaE3d07061fBE38D8f4bC2907384` |
+| USDC | `0x0E7718f505B2994A8330459e0F75a981F7Bb7e8C` |
+| USDT | `0x9865B4cf6Cb5332aF875D2aa35E332f6F9181a0b` |
+| DAI  | `0x300606f4e4f37Cac651E34D4f7700546ac011a01` |
+
+#### Pool Addresses
+| Pool Pair | Address |
+|-----------|----------|
+| USDC/USDT | `0x477b579638edc626e95F00A734110D1e6eA5DDC6` |
+| DAI/USDT  | `0x470F71a18aB98809c993C68a0302083b124388b5` |
+| USDC/DAI  | `0x660B3812933B522411117B3709908Dc6b9a1bFDa` |
+
+# Others
 
 ### Gas Optimization
 - Bitmap for tick tracking

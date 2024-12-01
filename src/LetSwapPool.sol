@@ -16,6 +16,7 @@ import "./lib/FixedPoint128.sol";
 // 2**256 = 32 bytes
 struct Slot0 {
     // 160 / 8 = 20 bytes
+    // price ratio of token1/token0
     uint160 sqrtPriceX96;
     // 24 / 8 = 3 bytes
     int24 tick;
