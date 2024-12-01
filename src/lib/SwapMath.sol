@@ -4,14 +4,26 @@ pragma solidity 0.8.20;
 import "./FullMath.sol";
 import "./SqrtPriceMath.sol";
 
+/// @title Swap Math library for computing price and amount changes during swaps
+/// @notice Contains functions for computing the result of a swap within a single tick price range
+/// @dev Handles both exact input and exact output swaps, and calculates fees
 library SwapMath {
+    /// @notice Computes the result of swapping some amount in or out, within a single tick range
+    /// @dev Calculates new sqrt price, input/output amounts, and fees for a swap step
+    /// @param sqrtRatioCurrentX96 The current sqrt price of the pool
+    /// @param sqrtRatioTargetX96 The price limit of the swap (target)
+    /// @param liquidity The amount of usable liquidity
+    /// @param amountRemaining How much input/output amount remains to be swapped
+    /// @param feePips The fee taken from the input amount, in hundredths of a bip (1 bip = 0.01%)
+    /// @return sqrtRatioNextX96 The price after swapping the amount in/out
+    /// @return amountIn The amount to be provided by the msg.sender
+    /// @return amountOut The amount to be received by the recipient
+    /// @return feeAmount The amount of input tokens paid as protocol fee
     function computeSwapStep(
         uint160 sqrtRatioCurrentX96,
         uint160 sqrtRatioTargetX96,
         uint128 liquidity,
         int256 amountRemaining,
-        // 1 bip = 1/100 x 1% = 1/1e4
-        // 1e6 = 100%, 1/100 of a bip
         uint24 feePips
     )
         internal

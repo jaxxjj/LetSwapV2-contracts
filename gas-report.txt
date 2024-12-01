@@ -1,0 +1,37 @@
+Ran 9 tests for test/LetSwapPool.t.sol:LetSwapPoolTest
+[PASS] testCrossingTickRanges() (gas: 958050)
+[PASS] testInitializePool() (gas: 57713)
+[PASS] testInvalidTickRanges() (gas: 76160)
+[PASS] testMultiPositionsSwap() (gas: 6771757)
+[PASS] testMultiplePositionsSameTick() (gas: 779841)
+[PASS] testSinglePositionSwap() (gas: 674546)
+[PASS] testSwapExactOutput() (gas: 473586)
+[PASS] testSwapWithInsufficientLiquidity() (gas: 147636)
+[PASS] testZeroLiquidityMint() (gas: 43088)
+Suite result: ok. 9 passed; 0 failed; 0 skipped; finished in 17.39ms (27.49ms CPU time)
+| src/LetSwapPool.sol:LetSwapPool contract |                 |        |        |         |         |
+|------------------------------------------|-----------------|--------|--------|---------|---------|
+| Deployment Cost                          | Deployment Size |        |        |         |         |
+| 5017568                                  | 25120           |        |        |         |         |
+| Function Name                            | min             | avg    | median | max     | # calls |
+| burn                                     | 73432           | 84643  | 80962  | 99638   | 6       |
+| collect                                  | 46712           | 53982  | 46712  | 68522   | 3       |
+| getPosition                              | 3644            | 3644   | 3644   | 3644    | 5       |
+| getSlot0                                 | 3494            | 3494   | 3494   | 3494    | 6       |
+| initialize                               | 24172           | 43472  | 47747  | 47747   | 11      |
+| mint                                     | 28333           | 202039 | 231682 | 299825  | 12      |
+| swap                                     | 29201           | 918063 | 112317 | 5918638 | 7       |
+
+
+| test/ERC20.sol:ERC20 contract |                 |       |        |       |         |
+|-------------------------------|-----------------|-------|--------|-------|---------|
+| Deployment Cost               | Deployment Size |       |        |       |         |
+| 867716                        | 5255            |       |        |       |         |
+| Function Name                 | min             | avg   | median | max   | # calls |
+| approve                       | 27142           | 44683 | 47042  | 47042 | 41      |
+| mint                          | 51647           | 60197 | 60197  | 68747 | 36      |
+
+
+
+
+Ran 1 test suite in 19.17ms (17.39ms CPU time): 9 tests passed, 0 failed, 0 skipped (9 total tests)

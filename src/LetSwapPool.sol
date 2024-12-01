@@ -29,6 +29,8 @@ function checkTicks(int24 tickLower, int24 tickUpper) pure {
     require(tickUpper <= TickMath.MAX_TICK);
 }
 
+/// @title Automated market maker pool
+/// @notice Manages liquidity positions and executes swaps between two ERC20 tokens
 contract LetSwapPool {
     using SafeCast for uint256;
     using SafeCast for int256;
@@ -59,6 +61,11 @@ contract LetSwapPool {
         slot0.unlocked = true;
     }
 
+    /// @notice Creates a new pool with the specified tokens and fee
+    /// @param _token0 The contract address of the first token
+    /// @param _token1 The contract address of the second token
+    /// @param _fee The fee collected upon every swap in the pool, denominated in hundredths of a bip
+    /// @param _tickSpacing The minimum number of ticks between initialized ticks
     constructor(
         address _token0,
         address _token1,
@@ -75,6 +82,8 @@ contract LetSwapPool {
         maxLiquidityPerTick = Tick.tickSpacingToMaxLiquidityPerTick(tickSpacing);
     }
 
+    /// @notice Sets the initial price for the pool
+    /// @param sqrtPriceX96 The initial sqrt price of the pool as a Q64.96
     function initialize(uint160 sqrtPriceX96) external {
         require(slot0.sqrtPriceX96 == 0, "already initialized");
         int24 tick = TickMath.getTickAtSqrtRatio(sqrtPriceX96);
@@ -209,6 +218,13 @@ contract LetSwapPool {
         }
     }
 
+    /// @notice Adds liquidity for the given price range
+    /// @param recipient The address that will receive the liquidity position
+    /// @param tickLower The lower tick of the position
+    /// @param tickUpper The upper tick of the position
+    /// @param amount The amount of liquidity to mint
+    /// @return amount0 The amount of token0 sent to the pool
+    /// @return amount1 The amount of token1 sent to the pool
     function mint(
         address recipient,
         int24 tickLower,
@@ -238,6 +254,14 @@ contract LetSwapPool {
         }
     }
 
+    /// @notice Collects tokens owed to a position
+    /// @param recipient The address that will receive the collected tokens
+    /// @param tickLower The lower tick of the position
+    /// @param tickUpper The upper tick of the position
+    /// @param amount0Requested How much token0 should be withdrawn from the fees owed
+    /// @param amount1Requested How much token1 should be withdrawn from the fees owed
+    /// @return amount0 The amount of token0 collected
+    /// @return amount1 The amount of token1 collected
     function collect(
         address recipient,
         int24 tickLower,
@@ -266,6 +290,12 @@ contract LetSwapPool {
         }
     }
 
+    /// @notice Burn liquidity from the sender's position
+    /// @param tickLower The lower tick of the position
+    /// @param tickUpper The upper tick of the position
+    /// @param amount The amount of liquidity to burn
+    /// @return amount0 The amount of token0 sent to the recipient
+    /// @return amount1 The amount of token1 sent to the recipient
     function burn(int24 tickLower, int24 tickUpper, uint128 amount)
         external
         lock
@@ -323,6 +353,13 @@ contract LetSwapPool {
         uint256 feeAmount;
     }
 
+    /// @notice Swap one token for another
+    /// @param recipient The address to receive the output tokens
+    /// @param zeroForOne Whether to swap token0 for token1 (true) or token1 for token0 (false)
+    /// @param amountSpecified The amount to swap (positive = exact input, negative = exact output)
+    /// @param sqrtPriceLimitX96 The Q64.96 sqrt price limit
+    /// @return amount0 The amount of token0 swapped (negative = out, positive = in)
+    /// @return amount1 The amount of token1 swapped (negative = out, positive = in)
     function swap(
         address recipient,
         bool zeroForOne,
